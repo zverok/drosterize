@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+require 'bundler/setup'
+require 'slop'
+require_relative '../lib/drosterize'
+
+opts = Slop.parse do |o|
+  o.string '-f', '--file', 'Filename of image to drosterize'
+  o.separator ''
+  o.separator 'Coordinates of inside rectangle (copies go inside it, required options):'
+  o.integer '-l', '--left', 'left'
+  o.integer '-t', '--top', 'top'
+  o.integer '-r', '--right', 'right'
+  o.integer '-b', '--bottom', 'bottom'
+  o.separator ''
+  o.separator 'Options of drosterization (have usable defaults):'
+  o.integer '-s', '--spirals', 'Spirals count (0 - just copy image, N: N simultaneous spirals clockwise, -N: counterclockwise'
+  o.integer '-c', '--copies', 'Copies per each rotation'
+  o.separator ''
+  o.bool '-h', '--help', 'Show this message'
+end
+
+if opts.help?
+  puts opts
+  exit
+end
+
+outname = opts.file.sub(/(\.[^.]+)$/, '-droste\1')
+
+img = Magick::Image.read(opts.file)
+
+start = Time.now
+
+Drosterize.
+  new(img, [opts.left, opts.top], [opts.right, opts.bottom]).
+  drosterize(opts.to_hash).
+  write(outname)
+
+puts "%s => %s: %.2f seconds" % [fname, outname, Time.now-start]

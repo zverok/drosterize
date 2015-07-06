@@ -1,0 +1,14 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rmagick (2.15.2)
+    ruby-prof (0.15.8)
+    slop (4.2.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rmagick
+  ruby-prof
+  slop

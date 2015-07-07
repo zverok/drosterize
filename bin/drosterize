@@ -5,6 +5,7 @@ require_relative '../lib/drosterize'
 
 opts = Slop.parse do |o|
   o.string '-f', '--file', 'Filename of image to drosterize'
+  o.string '-o', '--outname', 'Output filename'
   o.separator ''
   o.separator 'Coordinates of inside rectangle (copies go inside it, required options):'
   o.integer '-l', '--left', 'left'
@@ -24,15 +25,13 @@ if opts.help?
   exit
 end
 
-outname = opts.file.sub(/(\.[^.]+)$/, '-droste\1')
-
-img = Magick::Image.read(opts.file)
+img = Magick::Image.read(opts[:file]).first
 
 start = Time.now
 
 Drosterize.
-  new(img, [opts.left, opts.top], [opts.right, opts.bottom]).
+  new(img, [opts[:left], opts[:top]], [opts[:right], opts[:bottom]]).
   drosterize(opts.to_hash).
-  write(outname)
+  write(opts[:outname])
 
-puts "%s => %s: %.2f seconds" % [fname, outname, Time.now-start]
+puts "%s => %s: %.2f seconds" % [opts[:file], opts[:outname], Time.now-start]

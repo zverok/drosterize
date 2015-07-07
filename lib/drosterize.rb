@@ -1,7 +1,6 @@
 # encoding: utf-8
 require 'rmagick'
 require 'ostruct'
-require 'parallel'
 
 require_relative 'drosterize/core_ext'
 require_relative 'drosterize/rmagick_ext'
@@ -54,6 +53,8 @@ class Drosterize
   end
 
   # In fact, very slow due to data marshalling between processes
+  # You should add "parallel" gem to gemfile, and require it, if you
+  # want to experiment
   def parallel_drosterize(opts = {})
     opts = OpenStruct.new(DEFAULT_OPTS.merge(opts.reject{|k, v| !v}))
 

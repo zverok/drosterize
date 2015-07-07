@@ -27,5 +27,9 @@ module Geom
     def cover?(x, y)
       (xmin...xmax).cover?(x) && (ymin...ymax).cover?(y)
     end
+
+    def shift(dx, dy)
+      Geom::Rect.new([xmin+dx,ymin+dy], [xmax+dx, ymax+dy])
+    end
   end
 end
